@@ -20,7 +20,10 @@ def print_sequence(sequence):
 
 if __name__ == "__main__":
 	sequence = generate_random_sequence(1056)
+	print('Input')
+	print_sequence(sequence)
 	output = generate_output_sequence(sequence)
+	print('Output')
 	print_sequence(output)
 
 
