@@ -1,0 +1,42 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity counter is
+    port(
+        clk:        in std_logic;
+        en:         in std_logic;
+        cbs:        in std_logic;
+        set:        in std_logic;
+        is_zero:    out std_logic;
+        value:      out std_logic_vector(9 downto 0)
+    );
+end counter;
+
+architecture counter_arch of counter is
+    -- define count
+    signal count: unsigned(9 downto 0);
+
+    process(clk, en, cbs, set)
+    begin
+        if (clk'event and clock='1') then -- rising edge of clock
+            if (set='1') then -- preference to set
+                if (cbs='1') then
+                    count <= unsigned(768); -- 6144
+                else
+                    count <= unsigned(132); -- 1056
+                end if;
+            elsif (en='1' and (not count=0)) then -- if enabled and not zero
+                count <= count - 1; -- decrement the count on clock
+            end if;
+        end if;
+
+        -- assert is zero when the time's right
+        is_zero <= '0';
+        if (count=0) then
+            is_zero <= '1';
+        end if;
+        -- put count up on the value bus all the time
+        value <= std_logic_vector(count(9 downto 0));
+    end process;
+end counter_arch;
