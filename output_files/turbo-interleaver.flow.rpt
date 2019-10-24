@@ -1,0 +1,137 @@
+Flow report for turbo-interleaver
+Mon Oct 21 18:07:21 2019
+Quartus Prime Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Flow Summary
+  3. Flow Settings
+  4. Flow Non-Default Global Settings
+  5. Flow Elapsed Time
+  6. Flow OS Summary
+  7. Flow Log
+  8. Flow Messages
+  9. Flow Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2016  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel MegaCore Function License Agreement, or other 
+applicable license agreement, including, without limitation, 
+that your use is for the sole purpose of programming logic 
+devices manufactured by Intel and sold by Intel or its 
+authorized distributors.  Please refer to the applicable 
+agreement for further details.
+
+
+
++-------------------------------------------------------------------------------+
+; Flow Summary                                                                  ;
++---------------------------------+---------------------------------------------+
+; Flow Status                     ; Successful - Mon Oct 21 18:07:21 2019       ;
+; Quartus Prime Version           ; 16.1.0 Build 196 10/24/2016 SJ Lite Edition ;
+; Revision Name                   ; turbo-interleaver                           ;
+; Top-level Entity Name           ; interleaver                                 ;
+; Family                          ; Cyclone V                                   ;
+; Device                          ; 5CGXFC7C7F23C8                              ;
+; Timing Models                   ; Final                                       ;
+; Logic utilization (in ALMs)     ; N/A                                         ;
+; Total registers                 ; 6169                                        ;
+; Total pins                      ; 23                                          ;
+; Total virtual pins              ; 0                                           ;
+; Total block memory bits         ; 81,920                                      ;
+; Total DSP Blocks                ; 0                                           ;
+; Total HSSI RX PCSs              ; 0                                           ;
+; Total HSSI PMA RX Deserializers ; 0                                           ;
+; Total HSSI TX PCSs              ; 0                                           ;
+; Total HSSI PMA TX Serializers   ; 0                                           ;
+; Total PLLs                      ; 0                                           ;
+; Total DLLs                      ; 0                                           ;
++---------------------------------+---------------------------------------------+
+
+
++-----------------------------------------+
+; Flow Settings                           ;
++-------------------+---------------------+
+; Option            ; Setting             ;
++-------------------+---------------------+
+; Start date & time ; 10/21/2019 18:06:42 ;
+; Main task         ; Compilation         ;
+; Revision Name     ; turbo-interleaver   ;
++-------------------+---------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------+
+; Flow Non-Default Global Settings                                                                                                 ;
++--------------------------------------+----------------------------------------+-------------------+-------------+----------------+
+; Assignment Name                      ; Value                                  ; Default Value     ; Entity Name ; Section Id     ;
++--------------------------------------+----------------------------------------+-------------------+-------------+----------------+
+; COMPILER_SIGNATURE_ID                ; 345050784045.157169560208948           ; --                ; --          ; --             ;
+; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --                ; --          ; turbo_test     ;
+; EDA_NATIVELINK_SIMULATION_TEST_BENCH ; turbo_test                             ; --                ; --          ; eda_simulation ;
+; EDA_OUTPUT_DATA_FORMAT               ; Vhdl                                   ; --                ; --          ; eda_simulation ;
+; EDA_SIMULATION_TOOL                  ; ModelSim-Altera (VHDL)                 ; <None>            ; --          ; --             ;
+; EDA_TEST_BENCH_ENABLE_STATUS         ; TEST_BENCH_MODE                        ; --                ; --          ; eda_simulation ;
+; EDA_TEST_BENCH_FILE                  ; turbo_test.sv                          ; --                ; --          ; turbo_test     ;
+; EDA_TEST_BENCH_MODULE_NAME           ; turbo_test                             ; --                ; --          ; turbo_test     ;
+; EDA_TEST_BENCH_NAME                  ; turbo_test                             ; --                ; --          ; eda_simulation ;
+; EDA_TIME_SCALE                       ; 1 ps                                   ; --                ; --          ; eda_simulation ;
+; MAX_CORE_JUNCTION_TEMP               ; 85                                     ; --                ; --          ; --             ;
+; MIN_CORE_JUNCTION_TEMP               ; 0                                      ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit7.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit6.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit5.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit4.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit3.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit2.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit1.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; rom10bit0.cmp                          ; --                ; --          ; --             ;
+; PARTITION_COLOR                      ; -- (Not supported for targeted family) ; --                ; interleaver ; Top            ;
+; PARTITION_FITTER_PRESERVATION_LEVEL  ; -- (Not supported for targeted family) ; --                ; interleaver ; Top            ;
+; PARTITION_NETLIST_TYPE               ; -- (Not supported for targeted family) ; --                ; interleaver ; Top            ;
+; POWER_BOARD_THERMAL_MODEL            ; None (CONSERVATIVE)                    ; --                ; --          ; --             ;
+; POWER_PRESET_COOLING_SOLUTION        ; 23 MM HEAT SINK WITH 200 LFPM AIRFLOW  ; --                ; --          ; --             ;
+; PROJECT_OUTPUT_DIRECTORY             ; output_files                           ; --                ; --          ; --             ;
+; TOP_LEVEL_ENTITY                     ; interleaver                            ; turbo-interleaver ; --          ; --             ;
++--------------------------------------+----------------------------------------+-------------------+-------------+----------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                        ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis ; 00:00:39     ; 1.3                     ; 4945 MB             ; 00:00:51                           ;
+; Total                ; 00:00:39     ; --                      ; --                  ; 00:00:51                           ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+
+
++------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                    ;
++----------------------+------------------+------------+------------+----------------+
+; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
++----------------------+------------------+------------+------------+----------------+
+; Analysis & Synthesis ; vcm-10743        ; Windows 10 ; 10.0       ; x86_64         ;
++----------------------+------------------+------------+------------+----------------+
+
+
+------------
+; Flow Log ;
+------------
+quartus_map --read_settings_files=on --write_settings_files=off turbo-interleaver -c turbo-interleaver
+
+
+

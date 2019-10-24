@@ -12,14 +12,13 @@ entity fsm is
 				rdy_crc:		out std_logic;
 				vld_out:		out std_logic;
 				enable_rec:		out std_logic;
-				enable_send:		out std_logic;
-				latch_cbs:		out std_logic);
+				enable_send:		out std_logic);
 end fsm;
 
 architecture rtl of fsm is
 
 --signals
-type state_type is (ready, rec_size, rec, done, send_size, send);
+type state_type is (ready, rec_size, rec, done, send);
 signal state, state_next : state_type;
 
 begin
@@ -35,7 +34,7 @@ begin
 	end process;
 
 	--setting state next
-	process(state, vld_crc, rdy_out, counter_zero)
+	process(state, vld_crc, rdy_out, counter)
 	begin
 		case state is
 			when ready =>
@@ -54,12 +53,10 @@ begin
 				end if;
 			when done =>
 				if(rdy_out = '1') then
-					state_next <= send_size;
+					state_next <= send;
 				else 
 					state_next <= done;
 				end if;
-			when send_size =>
-				state_next <= send;
 			when send =>
 				if(counter_zero = '1') then
 					state_next <= ready;
@@ -78,37 +75,26 @@ begin
 				vld_out <= '0';
 				enable_rec <= '0';
 				enable_send <= '0';
-				latch_cbs <= '0';
 			when rec_size =>
-				rdy_crc <= '0';
+				rdy_crc <= '1';
 				vld_out <= '0';
 				enable_rec <= '0';
 				enable_send <= '0';
-				latch_cbs <= '1';
 			when rec =>
 				rdy_crc <= '0';
 				vld_out <= '0';
 				enable_rec <= '1';
 				enable_send <= '0';
-				latch_cbs <= '0';
 			when done =>
 				rdy_crc <= '0';
 				vld_out <= '1';
 				enable_rec <= '0';
 				enable_send <= '0';
-				latch_cbs <= '0';
-			when send_size =>
-				rdy_crc <= '0';
-				vld_out <= '0';
-				enable_rec <= '0';
-				enable_send <= '0';
-				latch_cbs <= '1';
 			when send =>
 				rdy_crc <= '0';
 				vld_out <= '0';
 				enable_rec <= '0';
 				enable_send <= '1';
-				latch_cbs <= '0';
 		end case;
 	end process;
 end rtl;
