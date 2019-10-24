@@ -12,7 +12,7 @@ entity addressable_shiftreg is
         aclr: in std_logic;
         shift_en: in std_logic;
         write_en: in std_logic;
-        address: in std_logic_vector(9 downto 0);
+        address: in std_logic_vector(10 downto 0);
         u: in std_logic;
         shiftout: out std_logic
     );
@@ -20,7 +20,7 @@ end addressable_shiftreg;
 
 architecture addressable_shiftreg_arch of addressable_shiftreg is
     -- declare signals
-    signal reg: std_logic_vector(767 downto 0);
+    signal reg: std_logic_vector(1055 downto 0);
 	 
 begin
 
@@ -32,8 +32,8 @@ begin
         elsif (rising_edge(clk)) then -- take precedence with shift_en
             if (shift_en='1') then
                 -- shift everything down, make the top 0
-                reg(766 downto 0) <= reg(767 downto 1);
-                reg(767) <= '0';
+                reg(1054 downto 0) <= reg(1055 downto 1);
+                reg(1055) <= '0';
             elsif (write_en='1' and u='1') then
                 reg(to_integer(unsigned(address))) <= '1'; -- is this legal?
             end if;

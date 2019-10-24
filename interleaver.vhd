@@ -9,10 +9,10 @@ entity interleaver is
         vld_crc:        in std_logic;
         rdy_out:        in std_logic;
         cbs:            in std_logic;
-        data_in:        in std_logic_vector(7 downto 0);
+		  data_in_serial: in std_logic;
         rdy_crc:        out std_logic;
         vld_out:        out std_logic;
-        data_out:       out std_logic_vector(7 downto 0)
+		  data_out_serial:out std_logic
     );
 
 end interleaver;
@@ -28,8 +28,8 @@ architecture interleaver_arch of interleaver is
     signal muxout0_sig: std_logic_vector(7 downto 0);
     signal muxout1_sig: std_logic_vector(7 downto 0);
     signal u7, u6, u5, u4, u3, u2, u1, u0: std_logic;
-    signal count_value_sig: std_logic_vector(9 downto 0);
-    signal adj_addr_sig: std_logic_vector(9 downto 0);
+    signal count_value_sig: std_logic_vector(10 downto 0);
+    signal adj_addr_sig: std_logic_vector(10 downto 0);
     signal inter_addr_sig0: std_logic_vector(9 downto 0);
     signal inter_addr_sig1: std_logic_vector(9 downto 0);
     signal inter_addr_sig2: std_logic_vector(9 downto 0);
@@ -38,6 +38,7 @@ architecture interleaver_arch of interleaver is
     signal inter_addr_sig5: std_logic_vector(9 downto 0);
     signal inter_addr_sig6: std_logic_vector(9 downto 0);
     signal inter_addr_sig7: std_logic_vector(9 downto 0);
+	 signal bit_serial_addr: std_logic_vector(10 downto 0);
 
     -- declare components
     ---- fsm
@@ -65,15 +66,15 @@ architecture interleaver_arch of interleaver is
             set:        in std_logic;
 				reset:		in std_logic;
             is_zero:    out std_logic;
-            count_val:      out std_logic_vector(9 downto 0)
+            count_val:      out std_logic_vector(10 downto 0)
         );
     end component;
     ---- Constant Adder
     component constant_add
         port(
-            in_addr: in std_logic_vector(9 downto 0);
+            in_addr: in std_logic_vector(10 downto 0);
             cbs: in std_logic;
-            out_addr: out std_logic_vector(9 downto 0)
+            out_addr: out std_logic_vector(10 downto 0)
         );
     end component;
     ---- 8 x ROM w/ precomputed bits
@@ -140,6 +141,14 @@ architecture interleaver_arch of interleaver is
 		    q		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
         );
     end component;
+	 
+	 component romserial
+		port(
+			address: IN STD_LOGIC_VECTOR(10 downto 0);
+			clock: IN STD_LOGIC := '1';
+			q: OUT STD_LOGIC_VECTOR(10 downto 0)
+		);
+	end component;
     
     ---- 2-sel 8-wide mux (switch on cbs)
     component mux2_8wide
@@ -158,7 +167,7 @@ architecture interleaver_arch of interleaver is
             aclr: in std_logic;
             shift_en: in std_logic;
             write_en: in std_logic;
-            address: in std_logic_vector(9 downto 0);
+            address: in std_logic_vector(10 downto 0);
             u: in std_logic;
             shiftout: out std_logic
         );
@@ -193,13 +202,13 @@ begin
     begin
         if (rising_edge(clk)) then
             u0 <= muxout0_sig(0) or muxout1_sig(0);
-            u1 <= muxout0_sig(7) or muxout1_sig(7);
+            u1 <= muxout0_sig(3) or muxout1_sig(7);
             u2 <= muxout0_sig(2) or muxout1_sig(6);
-            u3 <= muxout0_sig(1) or muxout1_sig(5);
+            u3 <= muxout0_sig(5) or muxout1_sig(5);
             u4 <= muxout0_sig(4) or muxout1_sig(4);
-            u5 <= muxout0_sig(3) or muxout1_sig(3);
+            u5 <= muxout0_sig(7) or muxout1_sig(3);
             u6 <= muxout0_sig(6) or muxout1_sig(2);
-            u7 <= muxout0_sig(5) or muxout1_sig(1);
+            u7 <= muxout0_sig(1) or muxout1_sig(1);
         end if;
     end process;
 
@@ -218,13 +227,13 @@ begin
         latch_cbs => latch_cbs_now
     );
 
-    mux_unit: mux2_8wide
-    port map(
-        sel => latched_cbs,
-        muxin => data_in,
-        muxout0 => muxout0_sig,
-        muxout1 => muxout1_sig
-    );
+--    mux_unit: mux2_8wide
+--    port map(
+--        sel => latched_cbs,
+--        muxin => data_in,
+--        muxout0 => muxout0_sig,
+--        muxout1 => muxout1_sig
+--    );
 
     counter_unit: counter
     port map(
@@ -243,151 +252,169 @@ begin
         cbs => latched_cbs,
         out_addr => adj_addr_sig
     );
+	 
+	 rom: romserial
+	 port map(
+			address => adj_addr_sig,
+			clock => clk,
+			q => bit_serial_addr
+	 );
 
     -- do this for all 0 through 7
-    rom10bit_unit0: rom10bit0
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig0
-    );
+--    rom10bit_unit0: rom10bit0
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig0
+--    );
 
-    rom10bit_unit1: rom10bit3
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig1
-    );
+--    rom10bit_unit1: rom10bit3
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig1
+--    );
+--
+--    rom10bit_unit2: rom10bit2
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig2
+--    );
+--
+--    rom10bit_unit3: rom10bit5
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig3
+--    );
+--
+--    rom10bit_unit4: rom10bit4
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig4
+--    );
+--
+--    rom10bit_unit5: rom10bit7
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig5
+--    );
+--
+--    rom10bit_unit6: rom10bit6
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig6
+--    );
+--
+--    rom10bit_unit7: rom10bit1
+--    port map(
+--        address => adj_addr_sig,
+--        clock => clk,
+--        q => inter_addr_sig7
+--    );
 
-    rom10bit_unit2: rom10bit2
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig2
-    );
-
-    rom10bit_unit3: rom10bit5
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig3
-    );
-
-    rom10bit_unit4: rom10bit4
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig4
-    );
-
-    rom10bit_unit5: rom10bit7
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig5
-    );
-
-    rom10bit_unit6: rom10bit6
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig6
-    );
-
-    rom10bit_unit7: rom10bit1
-    port map(
-        address => adj_addr_sig,
-        clock => clk,
-        q => inter_addr_sig7
-    );
-
-    -- do this for all 0 through 7
-    addr_sreg_unit0: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig0,
-        u => u0,
-        shiftout => data_out(0)
-    );
-
-    addr_sreg_unit1: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig1,
-        u => u1, 
-        shiftout => data_out(1)
-    );
-
-    addr_sreg_unit2: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig2,
-        u => u2,
-        shiftout => data_out(2)
-    );
-
-    addr_sreg_unit3: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig3,
-        u => u3,
-        shiftout => data_out(3)
-    );
-
-    addr_sreg_unit4: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig4,
-        u => u4,
-        shiftout => data_out(4)
-    );
-
-    addr_sreg_unit5: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig5,
-        u => u5,
-        shiftout => data_out(5)
-    );
-
-    addr_sreg_unit6: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig6,
-        u => u6,
-        shiftout => data_out(6)
-    );
-
-    addr_sreg_unit7: addressable_shiftreg
-    port map(
-        clk => clk,
-        aclr => asyn_reset,
-        shift_en => enable_send_sig,
-        write_en => enable_rec_delay_sig,
-        address => inter_addr_sig7,
-        u => u7,
-        shiftout => data_out(7)
-    );
+		addr_shiftreg: addressable_shiftreg
+		port map(
+			clk => clk,
+			aclr => asyn_reset,
+			shift_en => enable_send_sig,
+			write_en => enable_rec_delay_sig,
+			address => bit_serial_addr,
+			u => data_in_serial,
+			shiftout => data_out_serial
+		);
+--
+--    -- do this for all 0 through 7
+--    addr_sreg_unit0: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig0,
+--        u => u0,
+--        shiftout => data_out(0)
+--    );
+--
+--    addr_sreg_unit1: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig1,
+--        u => u1, 
+--        shiftout => data_out(1)
+--    );
+--
+--    addr_sreg_unit2: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig2,
+--        u => u2,
+--        shiftout => data_out(2)
+--    );
+--
+--    addr_sreg_unit3: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig3,
+--        u => u3,
+--        shiftout => data_out(3)
+--    );
+--
+--    addr_sreg_unit4: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig4,
+--        u => u4,
+--        shiftout => data_out(4)
+--    );
+--
+--    addr_sreg_unit5: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig5,
+--        u => u5,
+--        shiftout => data_out(5)
+--    );
+--
+--    addr_sreg_unit6: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig6,
+--        u => u6,
+--        shiftout => data_out(6)
+--    );
+--
+--    addr_sreg_unit7: addressable_shiftreg
+--    port map(
+--        clk => clk,
+--        aclr => asyn_reset,
+--        shift_en => enable_send_sig,
+--        write_en => enable_rec_delay_sig,
+--        address => inter_addr_sig7,
+--        u => u7,
+--        shiftout => data_out(7)
+--    );
 
 end interleaver_arch;

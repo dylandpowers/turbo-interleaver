@@ -1,6 +1,6 @@
 Flow report for turbo-interleaver
-Mon Oct 21 18:07:21 2019
-Quartus Prime Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
+Wed Oct 23 21:38:32 2019
+Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
 ---------------------
@@ -21,7 +21,7 @@ Quartus Prime Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
 ----------------
 ; Legal Notice ;
 ----------------
-Copyright (C) 2016  Intel Corporation. All rights reserved.
+Copyright (C) 2018  Intel Corporation. All rights reserved.
 Your use of Intel Corporation's design tools, logic functions 
 and other software and tools, and its AMPP partner logic 
 functions, and any output files from any of the foregoing 
@@ -29,30 +29,29 @@ functions, and any output files from any of the foregoing
 associated documentation or information are expressly subject 
 to the terms and conditions of the Intel Program License 
 Subscription Agreement, the Intel Quartus Prime License Agreement,
-the Intel MegaCore Function License Agreement, or other 
-applicable license agreement, including, without limitation, 
-that your use is for the sole purpose of programming logic 
-devices manufactured by Intel and sold by Intel or its 
-authorized distributors.  Please refer to the applicable 
-agreement for further details.
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details.
 
 
 
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +---------------------------------+---------------------------------------------+
-; Flow Status                     ; Successful - Mon Oct 21 18:07:21 2019       ;
-; Quartus Prime Version           ; 16.1.0 Build 196 10/24/2016 SJ Lite Edition ;
+; Flow Status                     ; Successful - Wed Oct 23 21:38:32 2019       ;
+; Quartus Prime Version           ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
 ; Revision Name                   ; turbo-interleaver                           ;
 ; Top-level Entity Name           ; interleaver                                 ;
 ; Family                          ; Cyclone V                                   ;
 ; Device                          ; 5CGXFC7C7F23C8                              ;
 ; Timing Models                   ; Final                                       ;
 ; Logic utilization (in ALMs)     ; N/A                                         ;
-; Total registers                 ; 6169                                        ;
-; Total pins                      ; 23                                          ;
+; Total registers                 ; 1075                                        ;
+; Total pins                      ; 9                                           ;
 ; Total virtual pins              ; 0                                           ;
-; Total block memory bits         ; 81,920                                      ;
+; Total block memory bits         ; 22,528                                      ;
 ; Total DSP Blocks                ; 0                                           ;
 ; Total HSSI RX PCSs              ; 0                                           ;
 ; Total HSSI PMA RX Deserializers ; 0                                           ;
@@ -68,7 +67,7 @@ agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 10/21/2019 18:06:42 ;
+; Start date & time ; 10/23/2019 21:38:09 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; turbo-interleaver   ;
 +-------------------+---------------------+
@@ -79,7 +78,7 @@ agreement for further details.
 +--------------------------------------+----------------------------------------+-------------------+-------------+----------------+
 ; Assignment Name                      ; Value                                  ; Default Value     ; Entity Name ; Section Id     ;
 +--------------------------------------+----------------------------------------+-------------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID                ; 345050784045.157169560208948           ; --                ; --          ; --             ;
+; COMPILER_SIGNATURE_ID                ; 345050816697.157188108906876           ; --                ; --          ; --             ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --                ; --          ; turbo_test     ;
 ; EDA_NATIVELINK_SIMULATION_TEST_BENCH ; turbo_test                             ; --                ; --          ; eda_simulation ;
 ; EDA_OUTPUT_DATA_FORMAT               ; Vhdl                                   ; --                ; --          ; eda_simulation ;
@@ -99,6 +98,7 @@ agreement for further details.
 ; MISC_FILE                            ; rom10bit2.cmp                          ; --                ; --          ; --             ;
 ; MISC_FILE                            ; rom10bit1.cmp                          ; --                ; --          ; --             ;
 ; MISC_FILE                            ; rom10bit0.cmp                          ; --                ; --          ; --             ;
+; MISC_FILE                            ; romserial.cmp                          ; --                ; --          ; --             ;
 ; PARTITION_COLOR                      ; -- (Not supported for targeted family) ; --                ; interleaver ; Top            ;
 ; PARTITION_FITTER_PRESERVATION_LEVEL  ; -- (Not supported for targeted family) ; --                ; interleaver ; Top            ;
 ; PARTITION_NETLIST_TYPE               ; -- (Not supported for targeted family) ; --                ; interleaver ; Top            ;
@@ -114,8 +114,8 @@ agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:39     ; 1.3                     ; 4945 MB             ; 00:00:51                           ;
-; Total                ; 00:00:39     ; --                      ; --                  ; 00:00:51                           ;
+; Analysis & Synthesis ; 00:00:24     ; 1.0                     ; 4896 MB             ; 00:00:31                           ;
+; Total                ; 00:00:24     ; --                      ; --                  ; 00:00:31                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
@@ -124,7 +124,7 @@ agreement for further details.
 +----------------------+------------------+------------+------------+----------------+
 ; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
 +----------------------+------------------+------------+------------+----------------+
-; Analysis & Synthesis ; vcm-10743        ; Windows 10 ; 10.0       ; x86_64         ;
+; Analysis & Synthesis ; vcm-10731        ; Windows 10 ; 10.0       ; x86_64         ;
 +----------------------+------------------+------------+------------+----------------+
 
 

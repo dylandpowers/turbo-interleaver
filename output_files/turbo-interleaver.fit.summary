@@ -1,0 +1,20 @@
+Fitter Status : Successful - Wed Oct 23 18:19:04 2019
+Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+Revision Name : turbo-interleaver
+Top-level Entity Name : interleaver
+Family : Cyclone V
+Device : 5CGXFC7C7F23C8
+Timing Models : Final
+Logic utilization (in ALMs) : 3,610 / 56,480 ( 6 % )
+Total registers : 6173
+Total pins : 23 / 268 ( 9 % )
+Total virtual pins : 0
+Total block memory bits : 81,920 / 7,024,640 ( 1 % )
+Total RAM Blocks : 8 / 686 ( 1 % )
+Total DSP Blocks : 0 / 156 ( 0 % )
+Total HSSI RX PCSs : 0 / 6 ( 0 % )
+Total HSSI PMA RX Deserializers : 0 / 6 ( 0 % )
+Total HSSI TX PCSs : 0 / 6 ( 0 % )
+Total HSSI PMA TX Serializers : 0 / 6 ( 0 % )
+Total PLLs : 0 / 13 ( 0 % )
+Total DLLs : 0 / 4 ( 0 % )

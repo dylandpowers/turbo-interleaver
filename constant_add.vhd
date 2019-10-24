@@ -4,9 +4,9 @@ use ieee.numeric_std.all;
 
 entity constant_add is
     port(
-        in_addr: std_logic_vector(9 downto 0);
+        in_addr: std_logic_vector(10 downto 0);
         cbs: in std_logic;
-        out_addr: out std_logic_vector(9 downto 0)
+        out_addr: out std_logic_vector(10 downto 0)
     );
 end constant_add;
 
@@ -18,7 +18,7 @@ begin
     begin
         -- simple async logic (purely functional unit)
         if (cbs='1') then -- if larger block size, skip over small block size
-            out_addr <= std_logic_vector(unsigned(in_addr) + 132); -- removed downto on in_addr here (Eric) 10/21
+            out_addr <= std_logic_vector(unsigned(in_addr) + 1056); -- removed downto on in_addr here (Eric) 10/21
         else
             out_addr <= in_addr; -- default buffer size
         end if;
