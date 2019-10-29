@@ -14,8 +14,8 @@ def generate_roms(block_size):
 	for i in range(block_size):
 		roms[i % 8].append(interleave[i] / 8)
 
-	for rom in roms:
-		rom.reverse()
+	# for rom in roms:
+	# 	rom.reverse()
 
 	return roms
 
