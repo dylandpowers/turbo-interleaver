@@ -14,11 +14,16 @@ def generate_roms(block_size):
 	for i in range(block_size):
 		roms[i % 8].append(interleave[i] / 8)
 
-	for rom in roms:
-		rom.reverse()
-
 	return roms
 
+def generate_rom(block_size):
+	f = lambda x: ((17 * x + 66 * x * x) % block_size)
+
+	rom = [0] * 1056
+	for i in range(block_size):
+		rom[f(i)] = i
+
+	return rom
 
 def generate_mifs(roms):
 	#the name of the output file
@@ -28,7 +33,7 @@ def generate_mifs(roms):
 		rom = roms[i]
 		depth = len(rom)
 		#the width of the data (how many bits each address will hold)
-		width = 10
+		width = 11
 
 
 		file = open(filename, "w")
@@ -41,7 +46,7 @@ def generate_mifs(roms):
 		for address in range(depth):
 			#data is what you would like to put in the address
 			data = rom[address]
-			file.write('%d : %d\n' %(address, data))
+			file.write('%d : %d;\n' %(address, data))
 
 
 		file.write('END;')

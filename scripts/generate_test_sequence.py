@@ -21,9 +21,11 @@ def print_sequence(sequence):
 if __name__ == "__main__":
 	sequence = generate_random_sequence(1056)
 	print('Input')
-	print_sequence(sequence)
-	output = generate_output_sequence(sequence)
+	output = [str(i) for i in generate_output_sequence(sequence)]
+	sequence = [str(i) for i in sequence]
+	sequence.reverse()
+	print(''.join(sequence))
 	print('Output')
-	print_sequence(output)
-
+	output.reverse()
+	print(''.join(output))
 
