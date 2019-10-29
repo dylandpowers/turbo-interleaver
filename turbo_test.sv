@@ -1,5 +1,4 @@
 module turbo_test();
-module turbo_test();
 
 reg[1055:0] in;
 reg[1055:0] out;
@@ -56,12 +55,12 @@ begin
 @(posedge clk)
 @(posedge clk)
 //end reset and assert vld_crc
-@(posedge clk) begin
+@(negedge clk) begin
  reset <= 1'b0;
  vld_crc <= 1'b1;
 end
 //send code block size
-@(posedge clk) begin
+@(negedge clk) begin
  vld_crc <= 1'b0;
  cbs <= 1'b0;
 end
@@ -77,8 +76,10 @@ end
 @(posedge vld_out) begin
  start_rec <= 1'b0;
 end
-//send cbs
 @(posedge clk) begin
+end
+//send cbs
+@(negedge clk) begin
  rdy_out <= 1'b0;
  cbs <= 0;
 end
@@ -97,7 +98,7 @@ always @(negedge clk)
 begin
 	// if recieving
 	if(start_rec) begin
-		data_in_rev = in[counter +: 8];
+		data_in = in[counter +: 8];
 //		#1
 //		data_in[0] <= data_in_rev[7];
 //		data_in[1] <= data_in_rev[6];

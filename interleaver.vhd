@@ -194,13 +194,13 @@ begin
     begin
         if (rising_edge(clk)) then
             u0 <= muxout0_sig(0) or muxout1_sig(0);
-            u1 <= muxout0_sig(7) or muxout1_sig(7);
+            u1 <= muxout0_sig(3) or muxout1_sig(7);
             u2 <= muxout0_sig(2) or muxout1_sig(6);
-            u3 <= muxout0_sig(1) or muxout1_sig(5);
+            u3 <= muxout0_sig(5) or muxout1_sig(5);
             u4 <= muxout0_sig(4) or muxout1_sig(4);
-            u5 <= muxout0_sig(3) or muxout1_sig(3);
+            u5 <= muxout0_sig(7) or muxout1_sig(3);
             u6 <= muxout0_sig(6) or muxout1_sig(2);
-            u7 <= muxout0_sig(5) or muxout1_sig(1);
+            u7 <= muxout0_sig(1) or muxout1_sig(1);
         end if;
     end process;
 

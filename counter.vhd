@@ -53,5 +53,5 @@ begin
         end if;
         -- put count up on the value bus all the time
         count_val <= std_logic_vector(count); -- removed downto here
-    end process;s
+    end process;
 end counter_arch;
