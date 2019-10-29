@@ -33,7 +33,7 @@ def generate_mifs(roms):
 		rom = roms[i]
 		depth = len(rom)
 		#the width of the data (how many bits each address will hold)
-		width = 11
+		width = 10
 
 
 		file = open(filename, "w")

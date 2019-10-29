@@ -62,6 +62,7 @@ architecture interleaver_arch of interleaver is
             clk:        in std_logic;
             en:         in std_logic;
             cbs:        in std_logic;
+            latched_cbs:    in std_logic;
             set:        in std_logic;
 				reset:		in std_logic;
             is_zero:    out std_logic;
@@ -231,6 +232,7 @@ begin
         clk => clk,
         en => enable_rec_sig,
         cbs => cbs,
+        latched_cbs => latched_cbs,
         set => latch_cbs_now,
 		  reset => asyn_reset,
         is_zero => count_zero_sig,
