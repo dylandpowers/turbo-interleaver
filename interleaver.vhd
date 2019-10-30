@@ -12,6 +12,7 @@ entity interleaver is
         data_in:        in std_logic_vector(7 downto 0);
         rdy_crc:        out std_logic;
         vld_out:        out std_logic;
+        last_byte:      out std_logic;
         data_out:       out std_logic_vector(7 downto 0)
     );
 
@@ -24,6 +25,7 @@ architecture interleaver_arch of interleaver is
     signal enable_rec_sig: std_logic;
     signal enable_send_sig: std_logic;
     signal latch_cbs_now: std_logic;
+    signal set_counter_sig: std_logic;
     signal enable_rec_delay_sig: std_logic;
     signal muxout0_sig: std_logic_vector(7 downto 0);
     signal muxout1_sig: std_logic_vector(7 downto 0);
@@ -53,7 +55,8 @@ architecture interleaver_arch of interleaver is
 			vld_out:		out std_logic;
 			enable_rec:		out std_logic;
             enable_send:	out std_logic;
-            latch_cbs:      out std_logic
+            latch_cbs:      out std_logic;
+            set_counter:    out std_logic
         );
     end component;
     ---- counter
@@ -61,10 +64,9 @@ architecture interleaver_arch of interleaver is
         port(
             clk:        in std_logic;
             en:         in std_logic;
-            cbs:        in std_logic;
             latched_cbs:    in std_logic;
             set:        in std_logic;
-				reset:		in std_logic;
+			reset:		in std_logic;
             is_zero:    out std_logic;
             count_val:      out std_logic_vector(9 downto 0)
         );
@@ -188,6 +190,11 @@ begin
         end if;
     end process;
 
+    process(count_zero_sig)
+    begin
+        last_byte <= count_zero_sig;
+    end process;
+
 
     -- calculate the inputs to the addr_sregs
     process(clk) -- latched - account for delay of 1 from ROM access latch
@@ -216,7 +223,8 @@ begin
         vld_out => vld_out,
         enable_rec => enable_rec_sig,
         enable_send => enable_send_sig,
-        latch_cbs => latch_cbs_now
+        latch_cbs => latch_cbs_now,
+        set_counter => set_counter_sig
     );
 
     mux_unit: mux2_8wide
@@ -230,11 +238,10 @@ begin
     counter_unit: counter
     port map(
         clk => clk,
-        en => enable_rec_sig,
-        cbs => cbs,
+        en => enable_rec_sig or enable_send_sig, 
         latched_cbs => latched_cbs,
-        set => latch_cbs_now,
-		  reset => asyn_reset,
+        set => set_counter_sig,
+		reset => asyn_reset,
         is_zero => count_zero_sig,
         count_val => count_value_sig
     );

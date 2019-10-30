@@ -6,7 +6,6 @@ entity counter is
     port(
         clk:        in std_logic;
         en:         in std_logic;
-        cbs:        in std_logic;
         latched_cbs:    in std_logic;
         set:        in std_logic;
 		reset:			in std_logic;
@@ -21,17 +20,13 @@ architecture counter_arch of counter is
 	 
 begin
 
-    process(clk, en, cbs, set, count, reset, latched_cbs)
+    process(clk, en, set, count, reset, latched_cbs)
     begin
 		  if(reset = '1') then
 			   count <= to_unsigned(0, 10);
         elsif (clk'event and clk='1') then -- rising edge of clock
             if (set='1') then -- preference to set
-                if (cbs='1') then
-                    count <= to_unsigned(0, 10); -- 6144
-                else
-                    count <= to_unsigned(0, 10); -- 1056
-                end if;
+                count <= to_unsigned(0, 10); -- 1056
             elsif (en='1') then -- if enabled and not zero
                 count <= count + 1; -- increment the count on clock
             end if;
