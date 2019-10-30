@@ -31,6 +31,7 @@ architecture interleaver_arch of interleaver is
     signal muxout1_sig: std_logic_vector(7 downto 0);
     signal u7, u6, u5, u4, u3, u2, u1, u0: std_logic;
     signal count_value_sig: std_logic_vector(9 downto 0);
+	 signal count_enable: std_logic;
     signal adj_addr_sig: std_logic_vector(9 downto 0);
     signal inter_addr_sig0: std_logic_vector(9 downto 0);
     signal inter_addr_sig1: std_logic_vector(9 downto 0);
@@ -234,11 +235,16 @@ begin
         muxout0 => muxout0_sig,
         muxout1 => muxout1_sig
     );
+	 
+	 process(enable_rec_sig, enable_send_sig)
+	 begin
+		count_enable <= enable_rec_sig or enable_send_sig;
+	 end process;
 
     counter_unit: counter
     port map(
         clk => clk,
-        en => enable_rec_sig or enable_send_sig, 
+        en => count_enable, 
         latched_cbs => latched_cbs,
         set => set_counter_sig,
 		reset => asyn_reset,

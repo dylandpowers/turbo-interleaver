@@ -14,7 +14,7 @@ reg [7:0] data_in_rev;
 reg [7:0] data_in;
 
 //outputs
-wire rdy_crc, vld_out;
+wire rdy_crc, vld_out, last_byte;
 wire [7:0] data_out;
 
 string correct;
@@ -77,18 +77,19 @@ end
  start_rec <= 1'b0;
 end
 @(posedge clk) begin
+	start_send <= 1'b1;
+	counter <= 0;
 end
-//send cbs
+@(posedge clk)
+@(posedge clk)
+@(posedge clk)
+@(posedge clk)
 @(negedge clk) begin
- rdy_out <= 1'b0;
- cbs <= 0;
+	rdy_out <= 1'b0;
 end
-@(posedge clk) begin
- start_send <= 1'b1;
- counter <= 0;
-end
-//wait one clock cycle
-@(posedge clk) begin
+@(negedge clk)
+@(negedge clk) begin
+	rdy_out <= 1'b1;
 end
 #3000
 $stop;
@@ -125,11 +126,16 @@ begin
 end
 
 always @(posedge clk) begin
-	$display("count: %0d | vld_crc: %b | start_rec: %b | start_send: %b | data_in: %b | data_out: %b | expected: %b | correct: %s", counter, vld_crc, start_rec, start_send, data_in, out[counter +: 8], expected_out[counter +: 8], correct);
-	counter = counter + 8; 
+	$display("count: %0d | vld_crc: %b | start_rec: %b | start_send: %b | last_byte: %b | data_in: %b | data_out: %b | expected: %b | correct: %s", counter, vld_crc, start_rec, start_send, last_byte, data_in, out[counter +: 8], expected_out[counter +: 8], correct);
+	if(start_rec) begin
+		counter = counter + 8; 
+	end
+	if(start_send && rdy_out) begin
+		counter = counter + 8;
+	end
 end
 
-interleaver dut(clk, reset, vld_crc, rdy_out, cbs, data_in, rdy_crc, vld_out, data_out);
+interleaver dut(clk, reset, vld_crc, rdy_out, cbs, data_in, rdy_crc, vld_out, last_byte, data_out);
 
 
 endmodule

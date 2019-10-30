@@ -13,7 +13,7 @@ entity fsm is
 				vld_out:		out std_logic;
 				enable_rec:		out std_logic;
 				enable_send:		out std_logic;
-				latch_cbs:		out std_logic
+				latch_cbs:		out std_logic;
 				set_counter:	out std_logic);
 end fsm;
 
