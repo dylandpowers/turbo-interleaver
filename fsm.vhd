@@ -79,7 +79,7 @@ begin
 	begin
 		case state is
 			when ready =>
-				rdy_crc <= '1';
+				rdy_crc <= '0';
 				vld_out <= '0';
 				enable_rec <= '0';
 				enable_send <= '0';
@@ -93,7 +93,7 @@ begin
 				latch_cbs <= '1';
 				set_counter <= '1';
 			when rec =>
-				rdy_crc <= '0';
+				rdy_crc <= '1';
 				vld_out <= '0';
 				enable_rec <= '1';
 				enable_send <= '0';

@@ -41,6 +41,7 @@ architecture interleaver_arch of interleaver is
     signal inter_addr_sig5: std_logic_vector(9 downto 0);
     signal inter_addr_sig6: std_logic_vector(9 downto 0);
     signal inter_addr_sig7: std_logic_vector(9 downto 0);
+	 signal data_in_rev: std_logic_vector(7 downto 0);
 
     -- declare components
     ---- fsm
@@ -193,7 +194,7 @@ begin
 
     process(count_zero_sig)
     begin
-        last_byte <= count_zero_sig;
+        last_byte <= count_zero_sig and enable_send_sig;
     end process;
 
 
@@ -227,6 +228,18 @@ begin
         latch_cbs => latch_cbs_now,
         set_counter => set_counter_sig
     );
+	 
+	 process(data_in)
+	 begin
+		data_in_rev(0) <= data_in(7);
+		data_in_rev(1) <= data_in(6);
+		data_in_rev(2) <= data_in(5);
+		data_in_rev(3) <= data_in(4);
+		data_in_rev(4) <= data_in(3);
+		data_in_rev(5) <= data_in(2);
+		data_in_rev(6) <= data_in(1);
+		data_in_rev(7) <= data_in(0);
+	 end process;
 
     mux_unit: mux2_8wide
     port map(
@@ -247,7 +260,7 @@ begin
         en => count_enable, 
         latched_cbs => latched_cbs,
         set => set_counter_sig,
-		reset => asyn_reset,
+		  reset => asyn_reset,
         is_zero => count_zero_sig,
         count_val => count_value_sig
     );
@@ -325,7 +338,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig0,
         u => u0,
-        shiftout => data_out(0)
+        shiftout => data_out(7)
     );
 
     addr_sreg_unit1: addressable_shiftreg
@@ -336,7 +349,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig1,
         u => u1, 
-        shiftout => data_out(1)
+        shiftout => data_out(6)
     );
 
     addr_sreg_unit2: addressable_shiftreg
@@ -347,7 +360,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig2,
         u => u2,
-        shiftout => data_out(2)
+        shiftout => data_out(5)
     );
 
     addr_sreg_unit3: addressable_shiftreg
@@ -358,7 +371,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig3,
         u => u3,
-        shiftout => data_out(3)
+        shiftout => data_out(4)
     );
 
     addr_sreg_unit4: addressable_shiftreg
@@ -369,7 +382,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig4,
         u => u4,
-        shiftout => data_out(4)
+        shiftout => data_out(3)
     );
 
     addr_sreg_unit5: addressable_shiftreg
@@ -380,7 +393,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig5,
         u => u5,
-        shiftout => data_out(5)
+        shiftout => data_out(2)
     );
 
     addr_sreg_unit6: addressable_shiftreg
@@ -391,7 +404,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig6,
         u => u6,
-        shiftout => data_out(6)
+        shiftout => data_out(1)
     );
 
     addr_sreg_unit7: addressable_shiftreg
@@ -402,7 +415,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig7,
         u => u7,
-        shiftout => data_out(7)
+        shiftout => data_out(0)
     );
 
 end interleaver_arch;
