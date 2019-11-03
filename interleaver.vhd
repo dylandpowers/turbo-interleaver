@@ -244,7 +244,7 @@ begin
     mux_unit: mux2_8wide
     port map(
         sel => latched_cbs,
-        muxin => data_in,
+        muxin => data_in_rev,
         muxout0 => muxout0_sig,
         muxout1 => muxout1_sig
     );
