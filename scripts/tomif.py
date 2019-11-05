@@ -1,11 +1,13 @@
 def generate_roms(block_size):
 
 	roms = [[] for i in range(8)]
+	f1, f2 = 0, 0
+	if block_size == 1056:
+		f1, f2 = 17, 66
+	else:
+		f1, f2 = 263, 480
 
-	f = lambda x: ((17 * x + 66 * x * x) % block_size)
-
-	print([f(i) % 8 for i in range(8)])
-	print([f(i) % 8 for i in range(8, 16)])
+	f = lambda x: ((f1 * x + f2 * x * x) % block_size)
 
 	interleave = {}
 	for i in range(block_size):
@@ -15,15 +17,6 @@ def generate_roms(block_size):
 		roms[i % 8].append(interleave[i] / 8)
 
 	return roms
-
-def generate_rom(block_size):
-	f = lambda x: ((17 * x + 66 * x * x) % block_size)
-
-	rom = [0] * 1056
-	for i in range(block_size):
-		rom[f(i)] = i
-
-	return rom
 
 def generate_mifs(roms):
 	#the name of the output file
@@ -53,4 +46,8 @@ def generate_mifs(roms):
 		file.close()
 
 if __name__ == "__main__":
-	generate_mifs(generate_roms(1056))
+	roms_1056 = generate_roms(1056)
+	roms_6144 = generate_roms(6144)
+	for i in range(len(roms_1056)):
+		roms_1056[i].extend(roms_6144[i])
+	generate_mifs(roms_1056)
