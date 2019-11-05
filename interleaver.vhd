@@ -12,6 +12,7 @@ entity interleaver is
         data_in:        in std_logic_vector(7 downto 0);
         rdy_crc:        out std_logic;
         vld_out:        out std_logic;
+        last_byte:      out std_logic;
         data_out:       out std_logic_vector(7 downto 0)
     );
 
@@ -24,11 +25,13 @@ architecture interleaver_arch of interleaver is
     signal enable_rec_sig: std_logic;
     signal enable_send_sig: std_logic;
     signal latch_cbs_now: std_logic;
+    signal set_counter_sig: std_logic;
     signal enable_rec_delay_sig: std_logic;
     signal muxout0_sig: std_logic_vector(7 downto 0);
     signal muxout1_sig: std_logic_vector(7 downto 0);
     signal u7, u6, u5, u4, u3, u2, u1, u0: std_logic;
     signal count_value_sig: std_logic_vector(9 downto 0);
+	 signal count_enable: std_logic;
     signal adj_addr_sig: std_logic_vector(9 downto 0);
     signal inter_addr_sig0: std_logic_vector(9 downto 0);
     signal inter_addr_sig1: std_logic_vector(9 downto 0);
@@ -38,6 +41,7 @@ architecture interleaver_arch of interleaver is
     signal inter_addr_sig5: std_logic_vector(9 downto 0);
     signal inter_addr_sig6: std_logic_vector(9 downto 0);
     signal inter_addr_sig7: std_logic_vector(9 downto 0);
+	 signal data_in_rev: std_logic_vector(7 downto 0);
 
     -- declare components
     ---- fsm
@@ -53,7 +57,8 @@ architecture interleaver_arch of interleaver is
 			vld_out:		out std_logic;
 			enable_rec:		out std_logic;
             enable_send:	out std_logic;
-            latch_cbs:      out std_logic
+            latch_cbs:      out std_logic;
+            set_counter:    out std_logic
         );
     end component;
     ---- counter
@@ -61,10 +66,9 @@ architecture interleaver_arch of interleaver is
         port(
             clk:        in std_logic;
             en:         in std_logic;
-            cbs:        in std_logic;
             latched_cbs:    in std_logic;
             set:        in std_logic;
-				reset:		in std_logic;
+			reset:		in std_logic;
             is_zero:    out std_logic;
             count_val:      out std_logic_vector(9 downto 0)
         );
@@ -188,19 +192,24 @@ begin
         end if;
     end process;
 
+    process(count_zero_sig)
+    begin
+        last_byte <= count_zero_sig and enable_send_sig;
+    end process;
+
 
     -- calculate the inputs to the addr_sregs
     process(clk) -- latched - account for delay of 1 from ROM access latch
     begin
         if (rising_edge(clk)) then
             u0 <= muxout0_sig(0) or muxout1_sig(0);
-            u1 <= muxout0_sig(7) or muxout1_sig(7);
+            u1 <= muxout0_sig(3) or muxout1_sig(7);
             u2 <= muxout0_sig(2) or muxout1_sig(6);
-            u3 <= muxout0_sig(1) or muxout1_sig(5);
+            u3 <= muxout0_sig(5) or muxout1_sig(5);
             u4 <= muxout0_sig(4) or muxout1_sig(4);
-            u5 <= muxout0_sig(3) or muxout1_sig(3);
+            u5 <= muxout0_sig(7) or muxout1_sig(3);
             u6 <= muxout0_sig(6) or muxout1_sig(2);
-            u7 <= muxout0_sig(5) or muxout1_sig(1);
+            u7 <= muxout0_sig(1) or muxout1_sig(1);
         end if;
     end process;
 
@@ -216,24 +225,41 @@ begin
         vld_out => vld_out,
         enable_rec => enable_rec_sig,
         enable_send => enable_send_sig,
-        latch_cbs => latch_cbs_now
+        latch_cbs => latch_cbs_now,
+        set_counter => set_counter_sig
     );
+	 
+	 process(data_in)
+	 begin
+		data_in_rev(0) <= data_in(7);
+		data_in_rev(1) <= data_in(6);
+		data_in_rev(2) <= data_in(5);
+		data_in_rev(3) <= data_in(4);
+		data_in_rev(4) <= data_in(3);
+		data_in_rev(5) <= data_in(2);
+		data_in_rev(6) <= data_in(1);
+		data_in_rev(7) <= data_in(0);
+	 end process;
 
     mux_unit: mux2_8wide
     port map(
         sel => latched_cbs,
-        muxin => data_in,
+        muxin => data_in_rev,
         muxout0 => muxout0_sig,
         muxout1 => muxout1_sig
     );
+	 
+	 process(enable_rec_sig, enable_send_sig)
+	 begin
+		count_enable <= enable_rec_sig or enable_send_sig;
+	 end process;
 
     counter_unit: counter
     port map(
         clk => clk,
-        en => enable_rec_sig,
-        cbs => cbs,
+        en => count_enable, 
         latched_cbs => latched_cbs,
-        set => latch_cbs_now,
+        set => set_counter_sig,
 		  reset => asyn_reset,
         is_zero => count_zero_sig,
         count_val => count_value_sig
@@ -312,7 +338,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig0,
         u => u0,
-        shiftout => data_out(0)
+        shiftout => data_out(7)
     );
 
     addr_sreg_unit1: addressable_shiftreg
@@ -323,7 +349,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig1,
         u => u1, 
-        shiftout => data_out(1)
+        shiftout => data_out(6)
     );
 
     addr_sreg_unit2: addressable_shiftreg
@@ -334,7 +360,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig2,
         u => u2,
-        shiftout => data_out(2)
+        shiftout => data_out(5)
     );
 
     addr_sreg_unit3: addressable_shiftreg
@@ -345,7 +371,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig3,
         u => u3,
-        shiftout => data_out(3)
+        shiftout => data_out(4)
     );
 
     addr_sreg_unit4: addressable_shiftreg
@@ -356,7 +382,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig4,
         u => u4,
-        shiftout => data_out(4)
+        shiftout => data_out(3)
     );
 
     addr_sreg_unit5: addressable_shiftreg
@@ -367,7 +393,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig5,
         u => u5,
-        shiftout => data_out(5)
+        shiftout => data_out(2)
     );
 
     addr_sreg_unit6: addressable_shiftreg
@@ -378,7 +404,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig6,
         u => u6,
-        shiftout => data_out(6)
+        shiftout => data_out(1)
     );
 
     addr_sreg_unit7: addressable_shiftreg
@@ -389,7 +415,7 @@ begin
         write_en => enable_rec_delay_sig,
         address => inter_addr_sig7,
         u => u7,
-        shiftout => data_out(7)
+        shiftout => data_out(0)
     );
 
 end interleaver_arch;
