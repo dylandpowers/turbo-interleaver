@@ -27,6 +27,7 @@ architecture interleaver_arch of interleaver is
     signal latch_cbs_now: std_logic;
     signal set_counter_sig: std_logic;
     signal enable_rec_delay_sig: std_logic;
+	 signal asr_in0, asr_in1, asr_in2, asr_in3, asr_in4, asr_in5, asr_in6, asr_in7: std_logic_vector(9 downto 0);
     signal muxout0_sig: std_logic_vector(7 downto 0);
     signal muxout1_sig: std_logic_vector(7 downto 0);
     signal u7, u6, u5, u4, u3, u2, u1, u0: std_logic;
@@ -329,14 +330,49 @@ begin
         q => inter_addr_sig7
     );
 
-    -- do this for all 0 through 7
+    
+	 
+	 -- do this for all 0 through 7
+	 
+	 -- Pick the input to the ASRs based on the block size
+	 process (latched_cbs, inter_addr_sig0,
+		inter_addr_sig1,
+		inter_addr_sig2,
+		inter_addr_sig3,
+		inter_addr_sig4,
+		inter_addr_sig5,
+		inter_addr_sig6,
+		inter_addr_sig7)
+	 begin
+		if (latched_cbs = '1') then
+			asr_in0 <= inter_addr_sig0;
+			asr_in1 <= inter_addr_sig1;
+			asr_in2 <= inter_addr_sig2;
+			asr_in3 <= inter_addr_sig3;
+			asr_in4 <= inter_addr_sig4;
+			asr_in5 <= inter_addr_sig5;
+			asr_in6 <= inter_addr_sig6;
+			asr_in7 <= inter_addr_sig7;
+		else
+			asr_in0 <= inter_addr_sig0;
+			asr_in1 <= inter_addr_sig5;
+			asr_in2 <= inter_addr_sig6;
+			asr_in3 <= inter_addr_sig3;
+			asr_in4 <= inter_addr_sig4;
+			asr_in5 <= inter_addr_sig1;
+			asr_in6 <= inter_addr_sig2;
+			asr_in7 <= inter_addr_sig7;
+		end if;
+	 end process;
+	 
+	 
     addr_sreg_unit0: addressable_shiftreg
     port map(
         clk => clk,
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig0,
+        address => asr_in0,
         u => u0,
         shiftout => data_out(7)
     );
@@ -347,7 +383,7 @@ begin
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig1,
+        address => asr_in1,
         u => u1, 
         shiftout => data_out(6)
     );
@@ -358,7 +394,7 @@ begin
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig2,
+        address => asr_in2,
         u => u2,
         shiftout => data_out(5)
     );
@@ -369,7 +405,7 @@ begin
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig3,
+        address => asr_in3,
         u => u3,
         shiftout => data_out(4)
     );
@@ -380,7 +416,7 @@ begin
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig4,
+        address => asr_in4,
         u => u4,
         shiftout => data_out(3)
     );
@@ -391,7 +427,7 @@ begin
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig5,
+        address => asr_in5,
         u => u5,
         shiftout => data_out(2)
     );
@@ -402,7 +438,7 @@ begin
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig6,
+        address => asr_in6,
         u => u6,
         shiftout => data_out(1)
     );
@@ -413,7 +449,7 @@ begin
         aclr => asyn_reset,
         shift_en => enable_send_sig,
         write_en => enable_rec_delay_sig,
-        address => inter_addr_sig7,
+        address => asr_in7,
         u => u7,
         shiftout => data_out(0)
     );
