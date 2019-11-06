@@ -10,7 +10,7 @@ def generate_roms():
 	print([f1(i) % 8 for i in range(8)])
 	print([f1(i) % 8 for i in range(8, 16)])
 
-	map0 = [0, 7, 2, 1, 4, 3, 6, 5]
+	map0 = [0, 3, 2, 5, 4, 7, 6, 1]
 	map1 = [0, 7, 6, 5, 4, 3, 2, 1]
 
 	interleave0 = {}
