@@ -294,7 +294,7 @@ begin
         q => inter_addr_sig2
     );
 
-    rom10bit_unit3: rom10bit6
+    rom10bit_unit3: rom10bit5
     port map(
         address => adj_addr_sig,
         clock => clk,
