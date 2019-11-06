@@ -1,22 +1,42 @@
-def generate_roms(block_size):
+def generate_roms():
 
 	roms = [[] for i in range(8)]
-	f1, f2 = 0, 0
-	if block_size == 1056:
-		f1, f2 = 17, 66
-	else:
-		f1, f2 = 263, 480
+	block_size0 = 1056
+	block_size1 = 6144
+	f0 = lambda x: ((17 * x + 66 * x * x) % block_size0)
+	f1 = lambda x: ((263 * x + 480 * x * x) % block_size1)
+	print([f0(i) % 8 for i in range(8)])
+	print([f0(i) % 8 for i in range(8, 16)])
+	print([f1(i) % 8 for i in range(8)])
+	print([f1(i) % 8 for i in range(8, 16)])
 
-	f = lambda x: ((f1 * x + f2 * x * x) % block_size)
+	map0 = [0, 3, 2, 5, 4, 7, 6, 1]
+	map1 = [0, 7, 6, 5, 4, 3, 2, 1]
 
-	interleave = {}
-	for i in range(block_size):
-		interleave[f(i)] = i
+	interleave0 = {}
+	interleave1 = {}
+	for i in range(block_size0):
+		interleave0[f0(i)] = i
+	
+	for i in range(block_size1):
+		interleave1[f1(i)] = i
 
-	for i in range(block_size):
-		roms[i % 8].append(interleave[i] / 8)
+	for i in range(block_size0):
+		roms[map0[i % 8]].append(interleave0[i] / 8)
+
+	for i in range(block_size1):
+		roms[map1[i % 8]].append(interleave1[i] / 8)
 
 	return roms
+
+def generate_rom(block_size):
+	f = lambda x: ((17 * x + 66 * x * x) % block_size)
+
+	rom = [0] * 1056
+	for i in range(block_size):
+		rom[f(i)] = i
+
+	return rom
 
 def generate_mifs(roms):
 	#the name of the output file
@@ -46,8 +66,4 @@ def generate_mifs(roms):
 		file.close()
 
 if __name__ == "__main__":
-	roms_1056 = generate_roms(1056)
-	roms_6144 = generate_roms(6144)
-	for i in range(len(roms_1056)):
-		roms_1056[i].extend(roms_6144[i])
-	generate_mifs(roms_1056)
+	generate_mifs(generate_roms())
