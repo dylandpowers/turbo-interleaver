@@ -280,21 +280,21 @@ begin
         q => inter_addr_sig0
     );
 
-    rom10bit_unit1: rom10bit3
+    rom10bit_unit1: rom10bit7
     port map(
         address => adj_addr_sig,
         clock => clk,
         q => inter_addr_sig1
     );
 
-    rom10bit_unit2: rom10bit2
+    rom10bit_unit2: rom10bit6
     port map(
         address => adj_addr_sig,
         clock => clk,
         q => inter_addr_sig2
     );
 
-    rom10bit_unit3: rom10bit5
+    rom10bit_unit3: rom10bit6
     port map(
         address => adj_addr_sig,
         clock => clk,
@@ -308,14 +308,14 @@ begin
         q => inter_addr_sig4
     );
 
-    rom10bit_unit5: rom10bit7
+    rom10bit_unit5: rom10bit3
     port map(
         address => adj_addr_sig,
         clock => clk,
         q => inter_addr_sig5
     );
 
-    rom10bit_unit6: rom10bit6
+    rom10bit_unit6: rom10bit2
     port map(
         address => adj_addr_sig,
         clock => clk,
