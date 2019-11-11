@@ -54,9 +54,11 @@ begin
 					state_next <= rec;
 				end if;
 			when count_reset =>
-				-- we might have to modify this so it goes right to send 
-				-- if rdy_out is already asserted when we first assert vld_out
-				state_next <= send_wait;
+				if(rdy_out = '1') then
+					state_next <= send;
+				else 
+					state_next <= send_wait;
+				end if;
 			when send_wait =>
 				if(rdy_out = '1') then
 					state_next <= send;
