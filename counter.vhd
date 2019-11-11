@@ -17,20 +17,25 @@ end counter;
 architecture counter_arch of counter is
     -- define count
     signal count: unsigned(9 downto 0);
+	 signal count_next: unsigned(9 downto 0);
 	 
 begin
 
-    process(clk, en, set, count, reset, latched_cbs)
-    begin
-		  if(reset = '1') then
-			   count <= to_unsigned(0, 10);
-        elsif (clk'event and clk='1') then -- rising edge of clock
-            if (set='1') then -- preference to set
-                count <= to_unsigned(0, 10); -- 1056
-            elsif (en='1') then -- if enabled and not zero
-                count <= count + 1; -- increment the count on clock
-            end if;
-        end if;
+		process(clk, reset) begin
+			if(reset = '1') then
+				count <= to_unsigned(0, 10);
+			elsif (set = '1') then
+				count <= to_unsigned(0, 10);
+			elsif (clk='1' and clk'event) then
+				count <= count_next;
+			end if;
+		end process;
+
+		process(en, set, count, latched_cbs)
+		begin
+			if (en='1') then 
+				 count_next <= count + 1;
+			end if;
 
         -- assert is zero when the time's right
         if (latched_cbs='0') then
